@@ -56,6 +56,13 @@ export default class Game {
       this.player.update();
       this.updateObstacles(deltaTime);
       this.checkCollisions();
+
+      if (this.scoreTracker.score >= 99999) {
+        // TODO: Remove console.log after implementing win screen
+        console.log('You win!');
+        this.isGameRunning = false;
+        this.isGameOver = true;
+      }
     }
   }
 

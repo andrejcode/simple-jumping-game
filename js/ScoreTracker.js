@@ -31,18 +31,21 @@ export default class ScoreTracker {
   draw(ctx) {
     ctx.font = '20px Arial';
     ctx.fillStyle = 'black';
-    const formattedScore = Math.floor(this.score).toString().padStart(5, '0');
+    const cappedScore = Math.min(Math.floor(this.score), 99999);
+    const formattedScore = cappedScore.toString().padStart(5, '0');
     ctx.fillText(formattedScore, ctx.canvas.width - 70, 30);
 
-    ctx.fillStyle = 'gray';
-    const formattedHighscore = Math.floor(this.highscore)
-      .toString()
-      .padStart(5, '0');
-    ctx.fillText(`HI ${formattedHighscore}`, ctx.canvas.width - 170, 30);
+    if (this.highscore > 0) {
+      ctx.fillStyle = 'gray';
+      const cappedHighscoreScore = Math.min(Math.floor(this.highscore), 99999);
+      const formattedHighscore = cappedHighscoreScore
+        .toString()
+        .padStart(5, '0');
+      ctx.fillText(`HI ${formattedHighscore}`, ctx.canvas.width - 170, 30);
+    }
   }
 
   update(deltaTime) {
-    console.log(this.score);
     this.score += deltaTime * 0.01;
   }
 
