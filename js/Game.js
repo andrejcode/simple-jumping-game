@@ -7,6 +7,7 @@ const OBSTACLE_MAX_INTERVAL = 2000;
 export default class Game {
   constructor() {
     this.initGame();
+    this.ouchSound = new Audio('./assets/sound/ouch-sound.mp3');
 
     document.addEventListener('keydown', (e) => {
       if (e.key === ' ') {
@@ -78,6 +79,9 @@ export default class Game {
       ) {
         this.isGameOver = true;
         this.isGameRunning = false;
+
+        this.ouchSound.currentTime = 0;
+        this.ouchSound.play();
 
         // TODO: Add Game Over Text
         console.log('Game Over');

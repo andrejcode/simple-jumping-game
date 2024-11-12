@@ -8,6 +8,7 @@ export default class Player {
     this.positionY = gameCanvas.height - this.height;
     this.velocityY = 1;
     this.isJumping = false;
+    this.jumpSound = new Audio('./assets/sound/jump-sound.mp3');
   }
 
   draw(ctx) {
@@ -30,6 +31,9 @@ export default class Player {
   jump() {
     if (!this.isJumping) {
       this.velocityY = -10;
+
+      this.jumpSound.currentTime = 0;
+      this.jumpSound.play();
     }
   }
 }
