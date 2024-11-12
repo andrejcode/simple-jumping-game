@@ -1,32 +1,26 @@
-import Player from './Player.js';
-import Obstacle from './Obstacle.js';
+import Game from './Game.js';
 
 const gameCanvas = document.getElementById('gameCanvas');
 const ctx = gameCanvas?.getContext('2d');
 
-const obstacle = new Obstacle();
-const player = new Player();
+const game = new Game();
 
-window.addEventListener('keydown', (e) => {
-  if (e.key === ' ') {
-    player.jump();
-  }
-});
+let lastTime = 0;
 
-function gameLoop() {
-  window.requestAnimationFrame(gameLoop);
+function gameLoop(timestamp) {
+  const deltaTime = timestamp - lastTime;
+  lastTime = timestamp;
 
   ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-  player.update();
-  player.draw(ctx);
+  game.update(deltaTime);
+  game.draw(ctx);
 
-  obstacle.update();
-  obstacle.draw(ctx);
+  requestAnimationFrame(gameLoop);
 }
 
 if (ctx) {
-  gameLoop();
+  requestAnimationFrame(gameLoop);
 } else {
   console.error('Canvas not supported.');
 }
