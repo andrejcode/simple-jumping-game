@@ -1,11 +1,13 @@
 import Player from './Player.js';
 import Obstacle from './Obstacle.js';
+import ScoreTracker from './ScoreTracker.js';
 
 const OBSTACLE_MIN_INTERVAL = 500;
 const OBSTACLE_MAX_INTERVAL = 2000;
 
 export default class Game {
   constructor() {
+    this.scoreTracker = new ScoreTracker();
     this.initGame();
     this.ouchSound = new Audio('./assets/sound/ouch-sound.mp3');
 
@@ -24,6 +26,7 @@ export default class Game {
   }
 
   initGame() {
+    this.scoreTracker.reset();
     this.player = new Player();
     this.obstacles = [];
     this.obstacleSpawnTimer = 0;
@@ -40,6 +43,7 @@ export default class Game {
   }
 
   draw(ctx) {
+    this.scoreTracker.draw(ctx);
     this.player.draw(ctx);
     this.obstacles.forEach((obstacle) => {
       obstacle.draw(ctx);
@@ -48,6 +52,7 @@ export default class Game {
 
   update(deltaTime) {
     if (this.isGameRunning) {
+      this.scoreTracker.update(deltaTime);
       this.player.update();
       this.updateObstacles(deltaTime);
       this.checkCollisions();
@@ -83,7 +88,9 @@ export default class Game {
         this.ouchSound.currentTime = 0;
         this.ouchSound.play();
 
-        // TODO: Add Game Over Text
+        this.scoreTracker.saveHighscore();
+
+        // TODO: Remove console.log after implementing game over screen
         console.log('Game Over');
       }
     });
