@@ -48,6 +48,22 @@ export default class Game {
     this.obstacles.forEach((obstacle) => {
       obstacle.draw(ctx);
     });
+
+    if (this.isGameOver) {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+      ctx.font = '48px Arial';
+      ctx.fillStyle = 'white';
+      ctx.textAlign = 'center';
+      ctx.fillText('Game Over', ctx.canvas.width / 2, ctx.canvas.height / 2);
+      ctx.font = '24px Arial';
+      ctx.fillText(
+        'Press SPACE to restart the game',
+        ctx.canvas.width / 2,
+        ctx.canvas.height / 2 + 30
+      );
+    }
   }
 
   update(deltaTime) {
