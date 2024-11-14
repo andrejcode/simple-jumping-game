@@ -6,7 +6,7 @@ export default class Player {
     this.height = 40;
     this.positionX = 40;
     this.positionY = gameCanvas.height - this.height;
-    this.velocityY = 1;
+    this.velocityY = 0;
     this.isJumping = false;
     this.jumpSound = new Audio('./assets/sound/jump-sound.mp3');
   }
@@ -19,10 +19,12 @@ export default class Player {
   update() {
     this.positionY += this.velocityY;
 
-    if (this.positionY + this.height + this.velocityY <= gameCanvas.height) {
+    if (this.positionY + this.height < gameCanvas.height) {
       this.isJumping = true;
       this.velocityY += GRAVITY;
     } else {
+      this.positionY = gameCanvas.height - this.height;
+
       this.isJumping = false;
       this.velocityY = 0;
     }
