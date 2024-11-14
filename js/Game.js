@@ -112,9 +112,6 @@ export default class Game {
         this.ouchSound.play();
 
         this.scoreTracker.saveHighscore();
-
-        // TODO: Remove console.log after implementing game over screen
-        console.log('Game Over');
       }
     });
   }
