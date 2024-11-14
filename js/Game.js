@@ -13,14 +13,16 @@ export default class Game {
 
     document.addEventListener('keydown', (e) => {
       if (e.key === ' ') {
-        if (!this.isGameRunning && !this.isGameOver) {
+        if (!this.isGameRunning && !this.isGameOver && this.canRestart) {
           this.isGameRunning = true;
-        } else if (this.isGameOver) {
+        } else if (this.isGameOver && this.canRestart) {
           this.initGame();
           this.isGameRunning = true;
         }
 
-        this.player.jump();
+        if (this.isGameRunning) {
+          this.player.jump();
+        }
       }
     });
   }
@@ -33,6 +35,8 @@ export default class Game {
     this.obstacleInterval = this.generateRandomInterval();
     this.isGameRunning = false;
     this.isGameOver = false;
+    this.countdown = 3;
+    this.canRestart = true;
   }
 
   generateRandomInterval() {
@@ -57,12 +61,8 @@ export default class Game {
       ctx.fillStyle = 'white';
       ctx.textAlign = 'center';
       ctx.fillText('Game Over', ctx.canvas.width / 2, ctx.canvas.height / 2);
-      ctx.font = '24px Arial';
-      ctx.fillText(
-        'Press SPACE to restart the game',
-        ctx.canvas.width / 2,
-        ctx.canvas.height / 2 + 30
-      );
+
+      this.drawCountdown(ctx);
     }
 
     if (this.scoreTracker.score >= 9999) {
@@ -113,6 +113,7 @@ export default class Game {
         this.player.positionX < obstacle.positionY + obstacle.height &&
         this.player.positionY + this.player.height > obstacle.positionY
       ) {
+        this.canRestart = false;
         this.isGameOver = true;
         this.isGameRunning = false;
 
@@ -120,7 +121,33 @@ export default class Game {
         this.ouchSound.play();
 
         this.scoreTracker.saveHighscore();
+
+        this.startCountdown();
       }
     });
+  }
+
+  drawCountdown(ctx) {
+    ctx.font = '24px Arial';
+    ctx.fillStyle = 'white';
+    ctx.textAlign = 'center';
+    ctx.fillText(
+      this.countdown > 0 ? this.countdown : 'Press SPACE to restart the game',
+      ctx.canvas.width / 2,
+      ctx.canvas.height / 2 + 30
+    );
+  }
+
+  startCountdown() {
+    this.countdown = 3;
+
+    const interval = setInterval(() => {
+      this.countdown -= 1;
+
+      if (this.countdown <= 0) {
+        clearInterval(interval);
+        this.canRestart = true;
+      }
+    }, 1000);
   }
 }
