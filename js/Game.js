@@ -118,9 +118,9 @@ export default class Game {
     this.obstacles.forEach((obstacle) => {
       if (
         this.player.positionX < obstacle.positionX + obstacle.width &&
-        this.player.positionX + this.player.width > obstacle.positionX &&
-        this.player.positionX < obstacle.positionY + obstacle.height &&
-        this.player.positionY + this.player.height > obstacle.positionY
+        this.player.positionX + this.player.width >= obstacle.positionX &&
+        this.player.positionY + this.player.height >= obstacle.positionY &&
+        this.player.positionY <= obstacle.positionY + obstacle.height
       ) {
         this.canRestart = false;
         this.isGameOver = true;
