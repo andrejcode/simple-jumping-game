@@ -49,7 +49,7 @@ export default class Game {
       obstacle.draw(ctx);
     });
 
-    if (this.isGameOver) {
+    if (this.isGameOver && this.scoreTracker.score < 9999) {
       ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
       ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -64,6 +64,16 @@ export default class Game {
         ctx.canvas.height / 2 + 30
       );
     }
+
+    if (this.scoreTracker.score >= 9999) {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+      ctx.font = '48px Arial';
+      ctx.fillStyle = 'white';
+      ctx.textAlign = 'center';
+      ctx.fillText('You win!', ctx.canvas.width / 2, ctx.canvas.height / 2);
+    }
   }
 
   update(deltaTime) {
@@ -73,9 +83,7 @@ export default class Game {
       this.updateObstacles(deltaTime);
       this.checkCollisions();
 
-      if (this.scoreTracker.score >= 99999) {
-        // TODO: Remove console.log after implementing win screen
-        console.log('You win!');
+      if (this.scoreTracker.score >= 9999) {
         this.isGameRunning = false;
         this.isGameOver = true;
       }
