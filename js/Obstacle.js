@@ -4,7 +4,6 @@ export default class Obstacle {
     this.height = 30;
     this.positionX = gameCanvas.width;
     this.positionY = gameCanvas.height - this.height;
-    this.speed = 5;
   }
 
   draw(ctx) {
@@ -12,7 +11,7 @@ export default class Obstacle {
     ctx.fillRect(this.positionX, this.positionY, this.width, this.height);
   }
 
-  update() {
-    this.positionX -= this.speed;
+  update(speed) {
+    this.positionX -= speed;
   }
 }

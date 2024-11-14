@@ -1,10 +1,15 @@
 import Player from './Player.js';
 import Obstacle from './Obstacle.js';
 import ScoreTracker from './ScoreTracker.js';
-import { FINAL_SCORE } from './constants.js';
+import {
+  FINAL_SCORE,
+  BASE_SPEED,
+  MAX_SPEED,
+  MAX_SCORE_FOR_MAX_SPEED,
+} from './constants.js';
 
 const OBSTACLE_MIN_INTERVAL = 500;
-const OBSTACLE_MAX_INTERVAL = 2000;
+const OBSTACLE_MAX_INTERVAL = 1500;
 
 export default class Game {
   constructor() {
@@ -38,6 +43,7 @@ export default class Game {
     this.isGameOver = false;
     this.countdown = 3;
     this.canRestart = true;
+    this.currentSpeed = BASE_SPEED;
   }
 
   generateRandomInterval() {
@@ -91,6 +97,13 @@ export default class Game {
       this.updateObstacles(deltaTime);
       this.checkCollisions();
 
+      const speedIncreaseFactor =
+        this.scoreTracker.score / MAX_SCORE_FOR_MAX_SPEED;
+      this.currentSpeed = Math.min(
+        BASE_SPEED + speedIncreaseFactor * (MAX_SPEED - BASE_SPEED),
+        MAX_SPEED
+      );
+
       if (this.scoreTracker.score >= FINAL_SCORE) {
         this.isGameRunning = false;
         this.isGameOver = true;
@@ -109,7 +122,7 @@ export default class Game {
     }
 
     this.obstacles = this.obstacles.filter((obstacle) => {
-      obstacle.update();
+      obstacle.update(this.currentSpeed);
       return obstacle.positionX + obstacle.width > 0;
     });
   }
