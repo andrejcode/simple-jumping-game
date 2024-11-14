@@ -1,6 +1,7 @@
 import Player from './Player.js';
 import Obstacle from './Obstacle.js';
 import ScoreTracker from './ScoreTracker.js';
+import { FINAL_SCORE } from './constants.js';
 
 const OBSTACLE_MIN_INTERVAL = 500;
 const OBSTACLE_MAX_INTERVAL = 2000;
@@ -53,7 +54,7 @@ export default class Game {
       obstacle.draw(ctx);
     });
 
-    if (this.isGameOver && this.scoreTracker.score < 9999) {
+    if (this.isGameOver && this.scoreTracker.score < FINAL_SCORE) {
       ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
       ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -65,7 +66,7 @@ export default class Game {
       this.drawCountdown(ctx);
     }
 
-    if (this.scoreTracker.score >= 9999) {
+    if (this.scoreTracker.score >= FINAL_SCORE) {
       ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
       ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -73,6 +74,13 @@ export default class Game {
       ctx.fillStyle = 'white';
       ctx.textAlign = 'center';
       ctx.fillText('You win!', ctx.canvas.width / 2, ctx.canvas.height / 2);
+
+      ctx.font = '24px Arial';
+      ctx.fillText(
+        'Thank you for playing the game!',
+        ctx.canvas.width / 2,
+        ctx.canvas.height / 2 + 30
+      );
     }
   }
 
@@ -83,9 +91,10 @@ export default class Game {
       this.updateObstacles(deltaTime);
       this.checkCollisions();
 
-      if (this.scoreTracker.score >= 9999) {
+      if (this.scoreTracker.score >= FINAL_SCORE) {
         this.isGameRunning = false;
         this.isGameOver = true;
+        this.canRestart = false;
       }
     }
   }

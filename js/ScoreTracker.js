@@ -1,3 +1,5 @@
+import { FINAL_SCORE } from './constants.js';
+
 const HIGHSCORE = 'highscore';
 
 export default class ScoreTracker {
@@ -31,13 +33,16 @@ export default class ScoreTracker {
   draw(ctx) {
     ctx.font = '20px Arial';
     ctx.fillStyle = 'black';
-    const cappedScore = Math.min(Math.floor(this.score), 99999);
+    const cappedScore = Math.min(Math.floor(this.score), FINAL_SCORE);
     const formattedScore = cappedScore.toString().padStart(5, '0');
     ctx.fillText(formattedScore, ctx.canvas.width - 70, 30);
 
     if (this.highscore > 0) {
       ctx.fillStyle = 'gray';
-      const cappedHighscoreScore = Math.min(Math.floor(this.highscore), 99999);
+      const cappedHighscoreScore = Math.min(
+        Math.floor(this.highscore),
+        FINAL_SCORE
+      );
       const formattedHighscore = cappedHighscoreScore
         .toString()
         .padStart(5, '0');
